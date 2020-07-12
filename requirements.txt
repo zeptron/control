@@ -1,0 +1,11 @@
+click==7.1.2
+Flask==1.1.2
+imagezmq==1.1.1
+imutils==0.5.3
+itsdangerous==1.1.0
+Jinja2==2.11.2
+MarkupSafe==1.1.1
+numpy==1.19.0
+opencv-python==4.3.0.36
+pyzmq==19.0.1
+Werkzeug==1.0.1
