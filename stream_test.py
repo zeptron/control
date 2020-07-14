@@ -38,7 +38,7 @@ app = Flask(__name__)
 @app.route("/")
 def index():
 	# return the rendered template
-	return render_template("index.html")
+	return render_template("receive.html")
 
 
 @app.route("/video_feed")
