@@ -20,14 +20,14 @@ def index():
             print("IP: {}, PORT: {}".format(IP, PORT))
             if PORT != "" and IP != "":
                 vars.stream = stream_camera_v3.StreamThread(IP, PORT)
-                vars.stream.isRunning = True
+                stream_camera_v3.vars.isRunning = True
                 vars.stream.start()
             else:
                 print("Invalid IP/PORT")
         elif request.form.get("btn_stop") == "Stop":
             print("Stop click")
             if vars.stream != None:
-                vars.stream.isRunning = False
+                stream_camera_v3.vars.isRunning = False
         else:
             print("ELSE")
 

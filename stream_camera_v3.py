@@ -17,6 +17,12 @@ import threading
 # parser.add_argument("--port", default=5555, type=int, help="ephemeral port number of the server (1024 to 65535)")
 # args = parser.parse_args()
 # src = args.video
+class vars:
+    frame = []
+    sentTrigger = False
+    isRunning = False
+    jpg_buffer = []
+
 class StreamThread(threading.Thread):
     def __init__(self, ip, port, video="",cameraId=0):
         threading.Thread.__init__(self)
@@ -24,6 +30,30 @@ class StreamThread(threading.Thread):
         self.port = port
         self.sender = imagezmq.ImageSender(connect_to='tcp://{}:{}'.format(self.ip, self.port))
         self.source_name = socket.gethostname()
+        encode = EncodeFrameThread(video, cameraId)
+        encode.daemon = True
+        encode.start()
+
+    def run(self):
+        while vars.isRunning:
+            # if vars.sentTrigger:
+            while len(vars.jpg_buffer)>0:
+                # t = time.time()
+                buffer = vars.jpg_buffer.pop()
+                self.sender.send_image(self.source_name, buffer)
+                # print("Sender time: " + str(time.time()-t))
+                # vars.sentTrigger = False
+            # print("Empty")
+        #     frame = self.vs.read()
+        #     ret_code, jpg_buffer = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), self.jpeg_quality])
+        #     self.sender.send_image(self.source_name, jpg_buffer)
+        #     print("Stream time: " + str(time.time()-t))
+        # print("Stopped stream")
+        # self.vs.stream.release()
+
+class EncodeFrameThread(threading.Thread):
+    def __init__(self, video="", cameraId=0):
+        threading.Thread.__init__(self)
         self.isRunning = False
         if video!="":
             src = video
@@ -33,16 +63,15 @@ class StreamThread(threading.Thread):
         time.sleep(2)
         self.jpeg_quality = 100
 
+        
     def run(self):
-        while self.isRunning:
+        print("Start encode thread")
+        while vars.isRunning:
+            # t = time.time()
             frame = self.vs.read()
-            t = time.time()
             ret_code, jpg_buffer = cv2.imencode(".jpg", frame, [int(cv2.IMWRITE_JPEG_QUALITY), self.jpeg_quality])
-            self.sender.send_image(self.source_name, jpg_buffer)
-            print("Stream time: " + str(time.time()-t))
-        print("Stopped stream")
-        self.vs.stream.release()
-
+            vars.jpg_buffer.insert(0, jpg_buffer)
+            # print("Process time: " + str(time.time()-t))
 
 # if src == "":
 #     src = 0
