@@ -17,9 +17,11 @@ def index():
         if request.form.get("btn_start") == "Start":
             IP = request.form.get("IP")
             PORT = request.form.get("Port")
+            VIDEO=request.form.get("Video")
             print("IP: {}, PORT: {}".format(IP, PORT))
+            print("VIDEO: {}".format(VIDEO))
             if PORT != "" and IP != "":
-                vars.stream = stream_camera_v3.StreamThread(IP, PORT)
+                vars.stream = stream_camera_v3.StreamThread(IP, PORT, VIDEO)
                 vars.stream.isRunning = True
                 vars.stream.start()
             else:

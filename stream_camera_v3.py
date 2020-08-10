@@ -22,6 +22,7 @@ class StreamThread(threading.Thread):
         threading.Thread.__init__(self)
         self.ip = ip
         self.port = port
+        self.video = video
         self.sender = imagezmq.ImageSender(connect_to='tcp://{}:{}'.format(self.ip, self.port))
         self.source_name = socket.gethostname()
         self.isRunning = False
