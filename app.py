@@ -1,6 +1,11 @@
 # import flask, requests
 from flask import Flask, render_template, request
 import stream_camera_v3
+import argparse
+
+parser = argparse.ArgumentParser(description='Object Detection using YOLO in OPENCV')
+parser.add_argument("--port", default=5000, type=int, help="Port to start app on")
+args = parser.parse_args()
 
 # Create the application.
 APP = Flask(__name__)
@@ -47,4 +52,4 @@ def index():
 
 if __name__ == '__main__':
     APP.debug=True
-    APP.run(host=('0.0.0.0'))
+    APP.run(host=('0.0.0.0'), port=('{}'.format(args.port)))
