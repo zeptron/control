@@ -9,3 +9,4 @@ numpy==1.19.0
 opencv-python
 pyzmq==19.0.1
 Werkzeug==1.0.1
+zeptron==1.0.6
